@@ -10,77 +10,69 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color(0xffF2F2F2),
         body: SafeArea(
-          child: ListView(
-            children: [
-              Column(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
 
-                   Logo(), 
-                   SizedBox(height: 40,),
-                  _Form(), 
-                  SizedBox(height: 40,),
-                  Labels(), 
-                  SizedBox(height: 70,),
-                  Text('Termos e condicoes de uso', style: TextStyle(fontWeight: FontWeight.w200))
+                  Logo( title: 'Login'),
+               
+                  _Form(),
+            
+                  Labels(route: 'register', title: 'Não tens uma conta?', subtitle: 'Criar uma conta agora!',),
+               
+                  Text('Termos e condicoes de uso',
+                      style: TextStyle(fontWeight: FontWeight.w200))
                 ],
               ),
-            ],
+            ),
           ),
         ));
   }
 }
-
-
 
 class _Form extends StatefulWidget {
   @override
   __FormState createState() => __FormState();
 }
 
-class __FormState extends State<_Form> { 
-
-
- final emailCtrl = TextEditingController();
- final passwordCtrl = TextEditingController();
-
+class __FormState extends State<_Form> {
+  final emailCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
-        child: Column(
-          children: [
-
-          
-           CustomInput(
-             icon: Icons.mail_outline, 
-             placeholder: 'Email', 
-             keyborderType: TextInputType.emailAddress,
-             controller: emailCtrl,
-           ),
-
-         
-           CustomInput(
-             icon: Icons.lock_outline, 
-             placeholder: 'Password', 
-             keyborderType: TextInputType.numberWithOptions(decimal: true),
-             controller: passwordCtrl,
-             isPassword: true,
-           ),
-
-           RaisedButton( 
-             
-             onPressed: (){ }, 
-
-             child: Bottom()
-           )
-
-          ],
-        ),
+      child: Column(
+        children: [
+          CustomInput(
+            icon: Icons.mail_outline,
+            placeholder: 'Email',
+            keyborderType: TextInputType.emailAddress,
+            controller: emailCtrl,
+          ),
+          CustomInput(
+            icon: Icons.lock_outline,
+            placeholder: 'Password',
+            keyborderType: TextInputType.numberWithOptions(decimal: true),
+            controller: passwordCtrl,
+            isPassword: true,
+          ),
+          Bottom(
+            text: 'Entrar',
+            color: Colors.blue,
+            onPressed: () {
+              print(emailCtrl.text);
+              print(passwordCtrl.text);
+            },
+          )
+        ],
+      ),
     );
   }
 }
-
