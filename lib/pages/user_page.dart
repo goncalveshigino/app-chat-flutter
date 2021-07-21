@@ -1,5 +1,6 @@
 import 'package:chat/models/user.dart';
-import 'package:flutter/material.dart';  
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';  
 
 class UserPage extends StatefulWidget {
  
@@ -9,6 +10,8 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> { 
+
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
 
   final users = [
@@ -36,14 +39,27 @@ class _UserPageState extends State<UserPage> {
           )
         ],
       ),
-       body: ListView.separated(
-         physics: BouncingScrollPhysics(),
-         itemCount: users.length,
-         itemBuilder: (_, i) => _userListTile(users[i]), 
-         separatorBuilder: (_, i) => Divider(), 
-
+       body: SmartRefresher(
+         controller: _refreshController,
+         enablePullDown: true,
+         onRefresh: _loadingUser,
+         header: WaterDropHeader(
+           complete: Icon( Icons.check, color: Colors.blue[400]), 
+           waterDropColor: Colors.blue[400],
+         ),
+         child: _listViewUsers(),
        )
     );
+  }
+
+  ListView _listViewUsers() {
+    return ListView.separated(
+       physics: BouncingScrollPhysics(),
+       itemCount: users.length,
+       itemBuilder: (_, i) => _userListTile(users[i]), 
+       separatorBuilder: (_, i) => Divider(), 
+
+     );
   }
 
   _userListTile(User user) {
@@ -63,5 +79,16 @@ class _UserPageState extends State<UserPage> {
            ),
          ),
        );
+  } 
+
+
+  _loadingUser() async {
+
+    await Future.delayed( Duration(milliseconds: 1000));
+
+    _refreshController.refreshCompleted();
+
   }
+
+
 }
