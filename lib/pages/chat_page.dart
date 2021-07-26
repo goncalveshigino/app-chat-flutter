@@ -102,7 +102,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ),
 
             //Botao para enviar 
-
             Container(
               margin: EdgeInsets.symmetric(horizontal: 4.0 ),
               child: Platform.isAndroid
