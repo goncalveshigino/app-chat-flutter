@@ -1,8 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'package:chat/widgets/botton.dart';
 import 'package:chat/widgets/custon_input.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/logo.dart';
-import 'package:flutter/material.dart';
+
+
+import 'package:provider/provider.dart';
+import 'package:chat/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -17,13 +22,13 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
-                  Logo( title: 'Login'),
-               
+                  Logo(title: 'Login'),
                   _Form(),
-            
-                  Labels(route: 'register', title: 'Não tens uma conta?', subtitle: 'Criar uma conta agora!',),
-               
+                  Labels(
+                    route: 'register',
+                    title: 'Não tens uma conta?',
+                    subtitle: 'Criar uma conta agora!',
+                  ),
                   Text('Termos e condicoes de uso',
                       style: TextStyle(fontWeight: FontWeight.w200))
                 ],
@@ -40,6 +45,7 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
 
@@ -49,13 +55,16 @@ class __FormState extends State<_Form> {
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
+
         children: [
+
           CustomInput(
             icon: Icons.mail_outline,
             placeholder: 'Email',
             keyborderType: TextInputType.emailAddress,
             controller: emailCtrl,
           ),
+
           CustomInput(
             icon: Icons.lock_outline,
             placeholder: 'Password',
@@ -63,15 +72,21 @@ class __FormState extends State<_Form> {
             controller: passwordCtrl,
             isPassword: true,
           ),
+
           Bottom(
             text: 'Entrar',
             color: Colors.blue,
             onPressed: () {
               print(emailCtrl.text);
               print(passwordCtrl.text);
+
+              final authService = Provider.of<AuthService>(context, listen: false);
+              authService.login(emailCtrl.text, passwordCtrl.text);
             },
           )
+
         ],
+
       ),
     );
   }
