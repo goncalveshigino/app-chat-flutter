@@ -13,15 +13,15 @@ class AuthService with ChangeNotifier {
         'email'   : email, 
         'password': password
       };
-     
-      final resp = await http.post('${ Environment.apiURL }/login', 
+    
+      final resp = await http.post('${ Environment.apiUrl }/login', 
         body: jsonEncode( data ), 
         headers: {
           'Content-Type': 'application/json'
-        }
+        } 
       );
 
-      print( resp.body );
+        print( resp.body );
 
     }
 

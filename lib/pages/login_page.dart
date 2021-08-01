@@ -50,7 +50,10 @@ class __FormState extends State<_Form> {
   final passwordCtrl = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
+  final authService = Provider.of<AuthService>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -79,8 +82,7 @@ class __FormState extends State<_Form> {
             onPressed: () {
               print(emailCtrl.text);
               print(passwordCtrl.text);
-
-              final authService = Provider.of<AuthService>(context, listen: false);
+              
               authService.login(emailCtrl.text, passwordCtrl.text);
             },
           )
