@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/botton.dart';
@@ -8,6 +9,7 @@ import 'package:chat/widgets/logo.dart';
 
 import 'package:provider/provider.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/helpers/alerta.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -75,15 +77,24 @@ class __FormState extends State<_Form> {
             controller: passwordCtrl,
             isPassword: true,
           ),
-
+         
+        
           Bottom(
             text: 'Entrar',
             color: Colors.blue,
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passwordCtrl.text);
+            onPressed: authService.autenticando ? null : () async {
               
-              authService.login(emailCtrl.text, passwordCtrl.text);
+              FocusScope.of(context).unfocus();
+
+             final loginOk = await authService.login(emailCtrl.text.trim(), passwordCtrl.text.trim()); 
+
+               if( loginOk){
+
+               } else {
+
+                 //Mostrar alerta 
+                 mostrarAlerta( context, 'Login incorreto', 'Tente novamente');
+               }
             },
           )
 
