@@ -60,6 +60,7 @@ class _UserPageState extends State<UserPage> {
   }
 
   ListView _listViewUsers() {
+
     return ListView.separated(
       physics: BouncingScrollPhysics(),
       itemCount: users.length,
@@ -68,10 +69,13 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _userListTile(User user) {
+  _userListTile(User user) {  
+
+     final authService = Provider.of<AuthService>(context);
+
     return ListTile(
-      title: Text(user.name),
-      subtitle: Text(user.email),
+      title: Text(authService.user.name),
+      subtitle: Text(authService.user.email),
       leading: CircleAvatar(
         child: Text(user.name.substring(0, 2)),
         backgroundColor: Colors.blue[100],
