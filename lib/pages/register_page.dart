@@ -1,8 +1,12 @@
+import 'package:chat/helpers/alerta.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:chat/widgets/botton.dart';
 import 'package:chat/widgets/custon_input.dart';
 import 'package:chat/widgets/labels.dart';
 import 'package:chat/widgets/logo.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -17,13 +21,14 @@ class RegisterPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
-                  Logo( title: 'Registro',),
-               
+                  Logo(
+                    title: 'Registro',
+                  ),
                   _Form(),
-            
-                  Labels(route: 'login', title: 'Já tens conta?', subtitle: 'Então mbora entrar'),
-               
+                  Labels(
+                      route: 'login',
+                      title: 'Já tens conta?',
+                      subtitle: 'Então mbora entrar'),
                   Text('Termos e condicoes de uso',
                       style: TextStyle(fontWeight: FontWeight.w200))
                 ],
@@ -40,34 +45,31 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
-
   final nameCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-
           CustomInput(
             icon: Icons.perm_identity,
             placeholder: 'Name',
             keyborderType: TextInputType.text,
             controller: nameCtrl,
-          ), 
-
+          ),
           CustomInput(
             icon: Icons.mail_outline,
             placeholder: 'Email',
             keyborderType: TextInputType.emailAddress,
             controller: emailCtrl,
           ),
-
-
           CustomInput(
             icon: Icons.lock_outline,
             placeholder: 'Password',
@@ -78,10 +80,26 @@ class __FormState extends State<_Form> {
           Bottom(
             text: 'Entrar',
             color: Colors.blue,
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passwordCtrl.text);
-            },
+            onPressed: authService.loading
+                ? null
+                : () async {
+                    print(nameCtrl.text);
+                    print(emailCtrl.text);
+                    print(passwordCtrl.text);
+
+                    final resgisterOk = await authService.register(
+                        nameCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        passwordCtrl.text.trim()
+                    );
+
+                    if (resgisterOk == true) {
+                      //TODO: Conenctar ao socket server
+                      Navigator.pushReplacementNamed(context, 'user');
+                    } else {
+                      mostrarAlerta( context, 'Resgistro Incorreto', resgisterOk);
+                    }
+                  },
           )
         ],
       ),

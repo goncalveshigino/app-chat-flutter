@@ -30,7 +30,7 @@ class User {
 
     Map<String, dynamic> toJson() => {
         "online": online,
-        "nome": name,
+        "name": name,
         "email": email,
         "uid": uid,
     };

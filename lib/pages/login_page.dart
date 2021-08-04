@@ -82,7 +82,7 @@ class __FormState extends State<_Form> {
           Bottom(
             text: 'Entrar',
             color: Colors.blue,
-            onPressed: authService.autenticando ? null : () async {
+            onPressed: authService.loading ? null : () async {
               
               FocusScope.of(context).unfocus();
 
