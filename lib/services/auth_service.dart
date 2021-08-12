@@ -11,26 +11,26 @@ import 'package:chat/models/user.dart';
 class AuthService with ChangeNotifier {
 
   User _user;
-
- // User user;
-  
+  bool _loading = false;
+ 
+ 
   User get user => this._user; 
-
   set user(User user) {
     this._user = user;
     notifyListeners();
   }
 
-  bool _loading = false;
 
   //Criar instancia do storage
   final _storage = new FlutterSecureStorage();
 
+//Get loading
   bool get loading => this._loading;
   set loading(bool value) {
     this._loading = value;
     notifyListeners();
   }
+
 
   //Getters do token de forma estatica
   static Future<String> getToken() async {
@@ -44,6 +44,8 @@ class AuthService with ChangeNotifier {
     final _storage = new FlutterSecureStorage();
     await _storage.delete(key: 'token');
   }
+
+
 
   Future<bool> login(String email, String password) async {
     this.loading = true;
@@ -67,6 +69,8 @@ class AuthService with ChangeNotifier {
       return false;
     }
   }
+
+
 
   Future register(String name, String email, String password) async {
     this.loading = true;
@@ -96,6 +100,8 @@ class AuthService with ChangeNotifier {
     }
   }
 
+
+
   //Verificar o token armazenado no storage e se ainda  é válido
   Future isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
@@ -115,6 +121,7 @@ class AuthService with ChangeNotifier {
       return false;
     }
   }
+  
 
   // Guardar Token
   Future _saveToken(String token) async {

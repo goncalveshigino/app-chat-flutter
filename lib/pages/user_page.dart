@@ -1,3 +1,4 @@
+import 'package:chat/services/socket_services.dart';
 import 'package:flutter/material.dart';
 import 'package:chat/services/auth_service.dart';
 
@@ -16,25 +17,27 @@ class _UserPageState extends State<UserPage> {
 
   final users = [
     User(uid: '1', name: 'Higino', email: 'higino@gmail.com', online: true),
-    User( uid: '2',name: 'Gonçalves', email: 'goncalves@gmail.com', online: false),
+    User( uid: '2', name: 'Gonçalves', email: 'goncalves@gmail.com', online: false),
     User(uid: '3', name: 'Lidia', email: 'lidia@gmail.com', online: true),
   ];
 
   @override
   Widget build(BuildContext context) {
-
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     //final user = authService.user;
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(authService.user.name, style: TextStyle(color: Colors.black87)),
+          title: Text(authService.user.name,
+              style: TextStyle(color: Colors.black87)),
           elevation: 1,
           backgroundColor: Colors.white,
           leading: IconButton(
             icon: Icon(Icons.exit_to_app, color: Colors.black87),
             onPressed: () {
-              //TODO: Desconectar do socket server
+
+              socketService.disconnect();
               Navigator.pushReplacementNamed(context, 'login');
               AuthService.deleteToken();
             },
@@ -42,8 +45,9 @@ class _UserPageState extends State<UserPage> {
           actions: [
             Container(
               margin: EdgeInsets.only(right: 10),
-              child: Icon(Icons.check_circle, color: Colors.blue[400]),
-              // child: Icon( Icons.offline_bolt, color: Colors.red[400] ),
+              child: (socketService.serverStatus == ServerStatus.Online ) 
+               ? Icon(Icons.check_circle, color: Colors.blue[400])
+               : Icon( Icons.offline_bolt, color: Colors.red[400] ),
             )
           ],
         ),
@@ -60,7 +64,6 @@ class _UserPageState extends State<UserPage> {
   }
 
   ListView _listViewUsers() {
-
     return ListView.separated(
       physics: BouncingScrollPhysics(),
       itemCount: users.length,
@@ -69,9 +72,8 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _userListTile(User user) {  
-
-     final authService = Provider.of<AuthService>(context);
+  _userListTile(User user) {
+    final authService = Provider.of<AuthService>(context);
 
     return ListTile(
       title: Text(authService.user.name),

@@ -8,4 +8,4 @@ class Environment {
   static String socketUrl = Platform.isAndroid
       ? 'http://192.168.43.42:3000'
       : 'http://localhost:3000';
-}
+} 

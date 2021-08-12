@@ -1,5 +1,6 @@
 import 'package:chat/helpers/alerta.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/services/socket_services.dart';
 import 'package:chat/widgets/botton.dart';
 import 'package:chat/widgets/custon_input.dart';
 import 'package:chat/widgets/labels.dart';
@@ -51,8 +52,10 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
 
+    final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+    
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -94,7 +97,8 @@ class __FormState extends State<_Form> {
                     );
 
                     if (resgisterOk == true) {
-                      //TODO: Conenctar ao socket server
+                      
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'user');
                     } else {
                       mostrarAlerta( context, 'Resgistro Incorreto', resgisterOk);

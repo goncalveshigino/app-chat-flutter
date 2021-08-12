@@ -1,4 +1,5 @@
 
+import 'package:chat/services/socket_services.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat/widgets/botton.dart';
@@ -54,7 +55,8 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) { 
 
-  final authService = Provider.of<AuthService>(context, listen: false);
+  final authService = Provider.of<AuthService>(context);
+  final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -89,11 +91,11 @@ class __FormState extends State<_Form> {
              final loginOk = await authService.login(emailCtrl.text.trim(), passwordCtrl.text.trim()); 
 
                if( loginOk){
-                 //Todo: Conectar o nosso socket server
+
+                 socketService.connect();
+                 
                  Navigator.pushReplacementNamed(context, 'user');
                } else {
-
-                 //Mostrar alerta 
                  mostrarAlerta( context, 'Login incorreto', 'Tente novamente');
                }
             },
